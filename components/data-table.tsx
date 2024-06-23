@@ -22,6 +22,7 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { Separator } from "@radix-ui/react-select";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Skeleton } from "./ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,6 +45,7 @@ export function DataTable<TData, TValue>({
       sorting,
     },
   });
+  const arr = new Array(columns.length).fill(0);
 
   return (
     <div className="rounded-md border">
@@ -84,11 +86,17 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
+            <>
+              {arr.map((_, index) => (
+                <TableRow key={index}>
+                  {arr.map((_, i) => (
+                    <TableCell key={i} className="text-center">
+                      <Skeleton className="h-4 w-[250px]" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </>
           )}
         </TableBody>
       </Table>
