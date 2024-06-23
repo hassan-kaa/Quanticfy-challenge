@@ -1,5 +1,13 @@
-import { renameProperties } from "@/app/utils/preprocessData";
+import {
+  fontaineAdapterQuery,
+  formatArrondissementFontaine,
+} from "@/app/utils/functions";
+import {
+  arrondissementMap,
+  renameProperties,
+} from "@/app/utils/preprocessData";
 import { NextResponse, NextRequest } from "next/server";
+
 const propertyMap = {
   type_objet: "type",
   modele: "nom",
@@ -9,16 +17,32 @@ const propertyMap = {
   commune: "arrondissement",
   dispo: "dispo",
 };
+
 export const GET = async (req: NextRequest) => {
-  const query = req.nextUrl.search.slice(1);
+  const query = fontaineAdapterQuery(req.nextUrl.search.slice(1));
+  Object.values(arrondissementMap).forEach((item) => {
+    if (query.includes(item)) {
+      query.replace(item, formatArrondissementFontaine(item) || item);
+    }
+  });
+
   try {
     const response = await fetch(
       `https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/fontaines-a-boire/records?where=${query}&limit=-1`
     );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
+
     const data = await response.json();
     const result = renameProperties(data.results, propertyMap);
     return NextResponse.json(result);
   } catch (e) {
-    console.log(e);
+    console.error("An error occurred:", e);
+    return NextResponse.json(
+      { error: "Failed to fetch data" },
+      { status: 500 }
+    );
   }
 };

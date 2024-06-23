@@ -15,9 +15,10 @@ import { Popover, PopoverTrigger } from "./ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import { Separator } from "./ui/separator";
 import CheckboxItem from "./CheckboxItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { useFilter } from "@/app/contexts/FiltersContext";
+import { createQuery } from "@/app/utils/functions";
 
 const arrondissements = [
   "75001",
@@ -45,32 +46,39 @@ const arrondissements = [
 const SearchBar = () => {
   const [quoiInput, setQuoiInput] = useState<string>("");
   const [ouInput, setOuInput] = useState<string>("");
-  const { filter, setFilterType, setAndQuery, setOrQuery } = useFilter();
+  const { filter, setFilterType, setQueries } = useFilter();
+  const [arrondissementsChecked, setArrondissementsChecked] = useState<
+    string[]
+  >([]);
+
+  const [displayedFilters, setDisplayedFilters] = useState<string[]>([]);
   const handleCheck = (item: string) => {
-    if (filter.orQuery.includes(item)) {
-      setOrQuery(filter.orQuery.filter((el) => el !== item));
-    } else {
-      setOrQuery([...filter.orQuery, item]);
-    }
+    if (arrondissementsChecked.includes(item)) {
+      setArrondissementsChecked(
+        arrondissementsChecked.filter((el) => el !== item)
+      );
+    } else setArrondissementsChecked([...arrondissementsChecked, item]);
   };
   const removeFilter = (item: string) => {
-    if (filter.andQuery.includes(item)) {
-      setAndQuery(filter.andQuery.filter((el) => el !== item));
-    } else {
-      setOrQuery(filter.orQuery.filter((el) => el !== item));
-    }
+    setDisplayedFilters(displayedFilters.filter((el) => el !== item));
+    setQueries(filter.queries.filter((el) => !el.includes(item)));
+    if (item == quoiInput) setQuoiInput("");
+    if (item == ouInput) setOuInput("");
   };
+
   const handleSearch = () => {
-    if (quoiInput === "" && ouInput === "") {
-      return;
+    if (quoiInput) setDisplayedFilters([...displayedFilters, quoiInput]);
+    if (ouInput) setDisplayedFilters([...displayedFilters, ouInput]);
+    if (arrondissementsChecked.length > 0)
+      setDisplayedFilters([...displayedFilters, ...arrondissementsChecked]);
+    let queries = [];
+    if (quoiInput) {
+      queries.push(createQuery("nom", [quoiInput]));
     }
-    if (quoiInput !== "" && ouInput === "") {
-      setOrQuery([quoiInput]);
-    }
-    if (quoiInput === "" && ouInput !== "") {
-      setOrQuery([ouInput]);
-    }
-    setAndQuery([quoiInput, ouInput]);
+    if (ouInput) queries.push(createQuery("adresse", [ouInput]));
+    if (arrondissementsChecked.length > 0)
+      queries.push(createQuery("arrondissement", arrondissementsChecked));
+    setQueries(queries);
   };
 
   return (
@@ -100,6 +108,7 @@ const SearchBar = () => {
           }}
           type="text"
           placeholder="Quoi... ?"
+          value={quoiInput}
         />
         <Input
           onChange={(e) => {
@@ -107,6 +116,7 @@ const SearchBar = () => {
           }}
           type="text"
           placeholder="Ou... ?"
+          value={ouInput}
         />
 
         <Select>
@@ -119,7 +129,7 @@ const SearchBar = () => {
                 <CheckboxItem
                   key={item}
                   label={item}
-                  checked={filter.orQuery.includes(item)}
+                  checked={arrondissementsChecked.includes(item)}
                   onChange={() => {
                     handleCheck(item);
                   }}
@@ -129,8 +139,10 @@ const SearchBar = () => {
           </SelectContent>
         </Select>
 
-        <Popover>
-          <PopoverTrigger className="w-full h-10 justify-between px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 bg-mainColor-50 hover:bg-mainColor-100 text-black rounded-md flex items-center gap-2 font-bold">
+        {/* <Popover>
+          <PopoverTrigger
+            className="w-full h-10 justify-between px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 bg-mainColor-50 hover:bg-mainColor-100 text-black rounded-md flex items-center gap-2 font-bold"
+          >
             Filtres
             <SlidersHorizontal size={20} />
           </PopoverTrigger>
@@ -140,7 +152,7 @@ const SearchBar = () => {
                 <CheckboxItem
                   key={item}
                   label={item}
-                  checked={filter.orQuery.includes(item)}
+                  checked={filter.queries.includes(item)}
                   onChange={() => {
                     handleCheck(item);
                   }}
@@ -148,7 +160,7 @@ const SearchBar = () => {
               ))}
             </div>
           </PopoverContent>
-        </Popover>
+        </Popover> */}
         <Button
           onClick={handleSearch}
           className="flex items-center gap-2 rounded-lg text-white bg-mainColor-500 hover:bg-mainColor-400  "
@@ -158,22 +170,7 @@ const SearchBar = () => {
         </Button>
       </div>
       <div className="flex gap-2 items-center">
-        {filter.andQuery.map((item) => (
-          <Badge
-            key={item}
-            className="py-2 px-4 cursor-pointer flex items-center gap-1 bg-mainColor-50 hover:bg-mainColor-100"
-            variant="outline"
-          >
-            {item}
-            <X
-              size={14}
-              onClick={() => {
-                removeFilter(item);
-              }}
-            />
-          </Badge>
-        ))}
-        {filter.orQuery.map((item) => (
+        {displayedFilters.map((item) => (
           <Badge
             key={item}
             className="py-2 px-4 cursor-pointer flex items-center gap-1 bg-mainColor-50 hover:bg-mainColor-100"

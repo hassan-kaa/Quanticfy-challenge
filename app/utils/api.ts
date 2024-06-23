@@ -1,9 +1,9 @@
 import { createUrl } from "./functions";
 
-export const getAllFontaines = async (or: string[], and: string[]) => {
+export const getAllFontaines = async (queries: string[]) => {
   try {
     const response = await fetch(
-      createUrl(`${process.env.NEXT_PUBLIC_API_URL}/fontaines`, or, and)
+      createUrl(`${process.env.NEXT_PUBLIC_API_URL}/fontaines`, queries)
     );
     const data = await response.json();
     return data;
@@ -11,10 +11,10 @@ export const getAllFontaines = async (or: string[], and: string[]) => {
     console.log(e);
   }
 };
-export const getAllIlotsEquipement = async (or: string[], and: string[]) => {
+export const getAllIlotsEquipement = async (queries: string[]) => {
   try {
     const response = await fetch(
-      createUrl(`${process.env.NEXT_PUBLIC_API_URL}/ilots/equipement`, or, and)
+      createUrl(`${process.env.NEXT_PUBLIC_API_URL}/ilots/equipement`, queries)
     );
     const data = await response.json();
     return data;
@@ -22,13 +22,12 @@ export const getAllIlotsEquipement = async (or: string[], and: string[]) => {
     console.log(e);
   }
 };
-export const getAllIlotsEspacesVertes = async (or: string[], and: string[]) => {
+export const getAllIlotsEspacesVertes = async (queries: string[]) => {
   try {
     const response = await fetch(
       createUrl(
         `${process.env.NEXT_PUBLIC_API_URL}/ilots/espaces-vertes`,
-        or,
-        and
+        queries
       )
     );
     const data = await response.json();
@@ -37,10 +36,10 @@ export const getAllIlotsEspacesVertes = async (or: string[], and: string[]) => {
     console.log(e);
   }
 };
-export const getAllItems = async (or: string[], and: string[]) => {
+export const getAllItems = async (queries: string[]) => {
   try {
     const response = await fetch(
-      createUrl(`${process.env.NEXT_PUBLIC_API_URL}`, or, and)
+      createUrl(`${process.env.NEXT_PUBLIC_API_URL}`, queries)
     );
     const data = await response.json();
     return data;

@@ -9,14 +9,12 @@ import {
 type filterType = {
   type: string;
   filters: string[];
-  andQuery: string[];
-  orQuery: string[];
+  queries: string[];
 };
 type FilterContextType = {
   filter: filterType;
   setFilterType: (type: string) => void;
-  setAndQuery: (andQuery: string[]) => void;
-  setOrQuery: (orQuery: string[]) => void;
+  setQueries: (queries: string[]) => void;
 };
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -32,8 +30,7 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
   const [filter, setFilter] = useState<filterType>({
     type: "tous",
     filters: filterOptions["tous"],
-    andQuery: [],
-    orQuery: [],
+    queries: [],
   });
 
   const setFilterType = (type: string) => {
@@ -44,16 +41,10 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const setAndQuery = (andQuery: string[]) => {
+  const setQueries = (queries: string[]) => {
     setFilter({
       ...filter,
-      andQuery: andQuery,
-    });
-  };
-  const setOrQuery = (orQuery: string[]) => {
-    setFilter({
-      ...filter,
-      orQuery: orQuery,
+      queries: queries,
     });
   };
 
@@ -62,9 +53,7 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <FilterContext.Provider
-      value={{ filter, setFilterType, setAndQuery, setOrQuery }}
-    >
+    <FilterContext.Provider value={{ filter, setFilterType, setQueries }}>
       {children}
     </FilterContext.Provider>
   );

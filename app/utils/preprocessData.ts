@@ -1,6 +1,6 @@
 import { Fontaine } from "./types";
 
-const arrondissementMap: { [key: string]: string } = {
+export const arrondissementMap: { [key: string]: string } = {
   "PARIS 1ER ARRONDISSEMENT": "75001",
   "PARIS 2EME ARRONDISSEMENT": "75002",
   "PARIS 3EME ARRONDISSEMENT": "75003",

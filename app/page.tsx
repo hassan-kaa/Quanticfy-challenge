@@ -24,29 +24,23 @@ export default function DemoPage() {
       let loadData;
       switch (filter.type) {
         case "fontaines":
-          loadData = await getAllFontaines(filter.orQuery, filter.andQuery);
+          loadData = await getAllFontaines(filter.queries);
           break;
         case "espacesVertes":
-          loadData = await getAllIlotsEspacesVertes(
-            filter.orQuery,
-            filter.andQuery
-          );
+          loadData = await getAllIlotsEspacesVertes(filter.queries);
           break;
         case "equipements":
-          loadData = await getAllIlotsEquipement(
-            filter.orQuery,
-            filter.andQuery
-          );
+          loadData = await getAllIlotsEquipement(filter.queries);
           break;
 
         default:
-          loadData = await getAllItems(filter.orQuery, filter.andQuery);
+          loadData = await getAllItems(filter.queries);
           break;
       }
       setData(loadData);
     }
     getData();
-  }, [filter.type, filter.andQuery, filter.orQuery]);
+  }, [filter.type, filter.queries]);
   return (
     <div className="container mx-auto py-10">
       <SearchBar />
