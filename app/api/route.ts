@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async (req: NextRequest) => {
   const query = req.nextUrl.search.slice(1);
   const urls: string[] = [
-    `http://localhost:3000/api/fontaines?${query}`,
-    `http://localhost:3000/api/ilots/espaces-vertes?${query}`,
-    `http://localhost:3000/api/ilots/equipement?${query}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/fontaines?${query}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/ilots/espaces-vertes?${query}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/ilots/equipement?${query}`,
   ];
   try {
     const responses = await Promise.all(urls.map((url) => fetch(url)));

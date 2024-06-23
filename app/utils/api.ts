@@ -3,7 +3,7 @@ import { createUrl } from "./functions";
 export const getAllFontaines = async (or: string[], and: string[]) => {
   try {
     const response = await fetch(
-      createUrl(`http://localhost:3000/api/fontaines`, or, and)
+      createUrl(`${process.env.NEXT_PUBLIC_API_URL}/fontaines`, or, and)
     );
     const data = await response.json();
     return data;
@@ -14,7 +14,7 @@ export const getAllFontaines = async (or: string[], and: string[]) => {
 export const getAllIlotsEquipement = async (or: string[], and: string[]) => {
   try {
     const response = await fetch(
-      createUrl("http://localhost:3000/api/ilots/equipement", or, and)
+      createUrl(`${process.env.NEXT_PUBLIC_API_URL}/ilots/equipement`, or, and)
     );
     const data = await response.json();
     return data;
@@ -25,7 +25,11 @@ export const getAllIlotsEquipement = async (or: string[], and: string[]) => {
 export const getAllIlotsEspacesVertes = async (or: string[], and: string[]) => {
   try {
     const response = await fetch(
-      createUrl("http://localhost:3000/api/ilots/espaces-vertes", or, and)
+      createUrl(
+        `${process.env.NEXT_PUBLIC_API_URL}/ilots/espaces-vertes`,
+        or,
+        and
+      )
     );
     const data = await response.json();
     return data;
@@ -36,7 +40,7 @@ export const getAllIlotsEspacesVertes = async (or: string[], and: string[]) => {
 export const getAllItems = async (or: string[], and: string[]) => {
   try {
     const response = await fetch(
-      createUrl("http://localhost:3000/api", or, and)
+      createUrl(`${process.env.NEXT_PUBLIC_API_URL}`, or, and)
     );
     const data = await response.json();
     return data;
