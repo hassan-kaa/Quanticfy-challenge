@@ -19,10 +19,12 @@ const propertyMap = {
 };
 
 export const GET = async (req: NextRequest) => {
-  const query = fontaineAdapterQuery(req.nextUrl.search.slice(1));
+  let query = fontaineAdapterQuery(req.nextUrl.search.slice(1));
   Object.values(arrondissementMap).forEach((item) => {
     if (query.includes(item)) {
-      query.replace(item, formatArrondissementFontaine(item) || item);
+      query = query
+        .replaceAll(item, formatArrondissementFontaine(item))
+        .replaceAll(" ", "%20");
     }
   });
 

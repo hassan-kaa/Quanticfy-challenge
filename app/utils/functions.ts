@@ -15,7 +15,7 @@ export const createQuery = (type: string, value: string[]) => {
 
 export const fontaineAdapterQuery = (query: string) => {
   return query
-    .replace("arrondissement", "commune")
+    .replaceAll("arrondissement", "commune")
     .replace("type", "type_objet")
     .replace("adresse", "voie")
     .replace("nom", "modele");
