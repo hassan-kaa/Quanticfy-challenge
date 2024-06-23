@@ -1,6 +1,6 @@
 import { Fontaine } from "./types";
 
-const arrondissementMap = {
+const arrondissementMap: { [key: string]: string } = {
   "PARIS 1ER ARRONDISSEMENT": "75001",
   "PARIS 2EME ARRONDISSEMENT": "75002",
   "PARIS 3EME ARRONDISSEMENT": "75003",
@@ -23,13 +23,18 @@ const arrondissementMap = {
   "PARIS 20EME ARRONDISSEMENT": "75020",
 };
 
-export const renameProperties = (data: Fontaine[], propertyMap: any) => {
+type PropertyMap = { [key: string]: string };
+
+export const renameProperties = (
+  data: Fontaine[],
+  propertyMap: PropertyMap
+): { [key: string]: any }[] => {
   return data.map((item) => {
-    const newItem = {};
+    const newItem: { [key: string]: any } = {};
     for (const [oldProp, newProp] of Object.entries(propertyMap)) {
       if (oldProp === "commune") {
         newItem[newProp] =
-          arrondissementMap[item[oldProp as keyof Fontaine]] ||
+          arrondissementMap[item[oldProp as keyof Fontaine] as string] ||
           item[oldProp as keyof Fontaine];
       } else {
         newItem[newProp] = item[oldProp as keyof Fontaine];
