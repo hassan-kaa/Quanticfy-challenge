@@ -32,7 +32,9 @@ const PopupCard = ({ item }: { item: GeneralType }) => {
                           <span className="font-bold capitalize text-mainColor-500">
                             {key}
                           </span>
-                          <span className="font-bold  ">{item[key]}</span>
+                          <span className="font-bold  ">
+                            {item[key as keyof GeneralType]}
+                          </span>
                         </div>
                       </div>
                       <Separator />
