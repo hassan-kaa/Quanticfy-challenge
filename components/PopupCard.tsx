@@ -24,7 +24,7 @@ const PopupCard = ({ item }: { item: GeneralType }) => {
       <DialogTrigger className="w-full h-10 justify-center items-center">
         <ExternalLink size={20} />
       </DialogTrigger>
-      <DialogContent className="w-full md:w-1/2">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-xl text-center">{item.nom}</DialogTitle>
           <DialogDescription className=" pt-2 ">
