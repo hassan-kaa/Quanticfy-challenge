@@ -1,4 +1,5 @@
 import { createUrl } from "./functions";
+import { Equipement, EspaceVert, Fontaine, GeneralType } from "./types";
 
 export const getAllFontaines = async (queries: string[]) => {
   try {
@@ -6,9 +7,10 @@ export const getAllFontaines = async (queries: string[]) => {
       createUrl(`${process.env.NEXT_PUBLIC_API_URL}/fontaines`, queries)
     );
     const data = await response.json();
-    return data;
+    return data as Fontaine[];
   } catch (e) {
     console.log(e);
+    return [];
   }
 };
 export const getAllIlotsEquipement = async (queries: string[]) => {
@@ -17,9 +19,10 @@ export const getAllIlotsEquipement = async (queries: string[]) => {
       createUrl(`${process.env.NEXT_PUBLIC_API_URL}/ilots/equipement`, queries)
     );
     const data = await response.json();
-    return data;
+    return data as Equipement[];
   } catch (e) {
     console.log(e);
+    return [];
   }
 };
 export const getAllIlotsEspacesVertes = async (queries: string[]) => {
@@ -31,9 +34,10 @@ export const getAllIlotsEspacesVertes = async (queries: string[]) => {
       )
     );
     const data = await response.json();
-    return data;
+    return data as EspaceVert[];
   } catch (e) {
     console.log(e);
+    return [];
   }
 };
 export const getAllItems = async (queries: string[]) => {
@@ -42,8 +46,9 @@ export const getAllItems = async (queries: string[]) => {
       createUrl(`${process.env.NEXT_PUBLIC_API_URL}`, queries)
     );
     const data = await response.json();
-    return data;
+    return data as GeneralType[];
   } catch (e) {
     console.log(e);
+    return [];
   }
 };

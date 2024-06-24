@@ -23,13 +23,16 @@ import { useState } from "react";
 import { Separator } from "@radix-ui/react-select";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
+import { DialogTrigger } from "./ui/dialog";
+import PopupCard from "./PopupCard";
+import { GeneralType } from "@/app/utils/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends GeneralType, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -68,6 +71,7 @@ export function DataTable<TData, TValue>({
                   </TableHead>
                 );
               })}
+              <TableHead className="font-bold">Open</TableHead>
             </TableRow>
           ))}
         </TableHeader>
@@ -83,6 +87,7 @@ export function DataTable<TData, TValue>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
+                <PopupCard item={data[row.index]} />
               </TableRow>
             ))
           ) : (
