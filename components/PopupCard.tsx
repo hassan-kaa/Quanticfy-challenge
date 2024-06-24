@@ -1,4 +1,4 @@
-import { GeneralType } from "@/app/utils/types";
+import { Equipement, EspaceVert, GeneralType } from "@/app/utils/types";
 import {
   Dialog,
   DialogContent,
@@ -10,9 +10,15 @@ import {
 import { ExternalLink } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
+import MapComponent from "./Map";
+const isEspaceVert = (item: GeneralType): item is EspaceVert => {
+  return (item as EspaceVert).geo_point_2d !== undefined;
+};
 
+const isEquipement = (item: GeneralType): item is Equipement => {
+  return (item as Equipement).geo_point_2d !== undefined;
+};
 const PopupCard = ({ item }: { item: GeneralType }) => {
-  console.log(item);
   return (
     <Dialog>
       <DialogTrigger className="w-full h-10 justify-center items-center">
@@ -22,6 +28,14 @@ const PopupCard = ({ item }: { item: GeneralType }) => {
         <DialogHeader>
           <DialogTitle className="text-xl text-center">{item.nom}</DialogTitle>
           <DialogDescription className=" pt-2 ">
+            {isEspaceVert(item) || isEquipement(item) ? (
+              <MapComponent
+                latitude={item.geo_point_2d.lat}
+                longitude={item.geo_point_2d.lon}
+              />
+            ) : (
+              ""
+            )}
             <ScrollArea className="h-[400px] w-full flex flex-col rounded-md border p-4">
               {Object.keys(item).map(
                 (key) =>
